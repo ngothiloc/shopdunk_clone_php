@@ -181,6 +181,11 @@ body {
   border-radius: 20px;
   border-color: #fff;
   box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+  transition: 0.3s ease;
+}
+.new:hover {
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+  transform: translateY(-5px);
 }
 
 .img_news img {
@@ -530,7 +535,7 @@ a {
 
 /* Footer Section */
 .footer-section {
-  width: 18%; /* Chiá»u rá»™ng cÃ¡c section thÃ´ng tin */
+  width: 18%;
 }
 
 .footer-title {

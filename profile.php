@@ -28,19 +28,24 @@ if (isset($_POST['update_profile'])) {
     $birthdate = $_POST['birthdate'];
     $address = $_POST['address'];
 
-    $update_sql = "UPDATE customers SET name=?, email=?, phone=?, gender=?, birthdate=?, address=? WHERE id=?";
-    $update_stmt = mysqli_prepare($conn, $update_sql);
-    mysqli_stmt_bind_param($update_stmt, "ssssssi", $name, $email, $phone, $gender, $birthdate, $address, $user_id);
-    
-    if (mysqli_stmt_execute($update_stmt)) {
-        echo "<script>
-            showSuccessAlert('Cập nhật thông tin thành công!');
-            setTimeout(function() {
-                window.location.href = 'profile.php';
-            }, 1000);
-        </script>";                  
+    // Kiểm tra định dạng số điện thoại
+    if (!preg_match('/^0\d{9}$/', $phone)) {
+        echo "<script>showDangerAlert('Số điện thoại không hợp lệ! Vui lòng nhập số bắt đầu bằng 0 và có 10 chữ số.');</script>";
     } else {
-        echo "<script>showDangerAlert('Có lỗi xảy ra, vui lòng thử lại!');</script>";
+        $update_sql = "UPDATE customers SET name=?, email=?, phone=?, gender=?, birthdate=?, address=? WHERE id=?";
+        $update_stmt = mysqli_prepare($conn, $update_sql);
+        mysqli_stmt_bind_param($update_stmt, "ssssssi", $name, $email, $phone, $gender, $birthdate, $address, $user_id);
+        
+        if (mysqli_stmt_execute($update_stmt)) {
+            echo "<script>
+                showSuccessAlert('Cập nhật thông tin thành công!');
+                setTimeout(function() {
+                    window.location.href = 'profile.php';
+                }, 1000);
+            </script>";                  
+        } else {
+            echo "<script>showDangerAlert('Có lỗi xảy ra, vui lòng thử lại!');</script>";
+        }
     }
 }
 
@@ -105,7 +110,7 @@ include 'web/components/head.php';
                     </div>
                     <div class="info-group">
                         <label>Số điện thoại:</label>
-                        <input type="tel" name="phone" value="<?php echo htmlspecialchars($user['phone']); ?>" required>
+                        <input type="tel" name="phone" pattern="0[0-9]{9}" title="Số điện thoại phải bắt đầu bằng số 0 và có 10 chữ số" value="<?php echo htmlspecialchars($user['phone']); ?>" required>
                     </div>
                     <div class="info-group">
                         <label>Giới tính:</label>
@@ -202,7 +207,7 @@ include 'web/components/head.php';
         .profile-container {
             max-width: 1200px;
             margin: 40px auto;
-            padding: 0 20px;
+            padding: 0 20px;            
         }
 
         .profile-header {

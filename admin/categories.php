@@ -93,9 +93,9 @@ $page_title = "Quản lý danh mục";
                 <!-- Form thêm/sửa danh mục -->
                 <div class="form-container">
                     <h2><?php echo isset($_GET['edit']) ? 'Sửa danh mục' : 'Thêm danh mục mới'; ?></h2>
-                    <form method="POST">
+                    <form method="POST">                        
                         <input type="hidden" name="id" value="<?php echo isset($edit_category) ? $edit_category['id'] : ''; ?>">
-                        
+
                         <div class="form-group">
                             <label for="name">Tên danh mục</label>
                             <input type="text" id="name" name="name" 

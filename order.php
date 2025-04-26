@@ -52,20 +52,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } else {
         // Thêm đơn hàng vào database
         $order_sql = "INSERT INTO orders (customer_id, product_id, gender, fullname, phone, address, note, total_amount, status) 
-                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'pending')";
-        $order_stmt = mysqli_prepare($conn, $order_sql);
-        mysqli_stmt_bind_param($order_stmt, "iisssssd", 
-            $_SESSION['user_id'], 
-            $product_id,
-            $gender,
-            $fullname,
-            $phone,
-            $address,
-            $note,
-            $total_amount
-        );
-
-        if (mysqli_stmt_execute($order_stmt)) {
+                     VALUES ('$_SESSION[user_id]', '$product_id', '$gender', '$fullname', '$phone', '$address', '$note', '$total_amount', 'pending')";
+        
+        if (mysqli_query($conn, $order_sql)) {
             echo "<script>
                 showSuccessAlert('Đặt hàng thành công!');
                 setTimeout(function() {
@@ -350,7 +339,7 @@ include 'web/components/head.php';
             color: white;
             border: none;
             border-radius: 4px;
-            padding: 10px 20px;
+            padding: 10px 20px;                         
             font-size: 1em;
             cursor: pointer;
             width: 100%;

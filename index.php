@@ -50,14 +50,14 @@ include 'web/components/head.php';
       <div class="slides">
         <img src="web/assets/main/banner iP16sr_PC.png" alt="Ảnh 1" class="slide" />
         <img src="web/assets/main/banner iPdsr_PC.png" alt="Ảnh 2" class="slide" />
-        <img src="web/assets/main/banner Mbsr_PC.png" alt="Ảnh 3" class="slide" />
+        <img src="web/assets/main/banner Mbsr_PC.png" alt="Ảnh 3" class="slide" />       
       </div>
       <button class="prev" onclick="prevSlide()">❮</button>
       <button class="next" onclick="nextSlide()">❯</button>
     </div>
 
     <!-- product iphone-->
-    <div class="sanpham">
+    <div id="iphone" class="sanpham">
       <a href="page_iphone.php">
         <h2>iphone</h2>
       </a>
@@ -79,7 +79,7 @@ include 'web/components/head.php';
     </div>
 
     <!-- product ipad-->
-    <div class="sanpham">
+    <div id="ipad" class="sanpham">
       <a href="page_ipad.php">
         <h2>ipad</h2>
       </a>
@@ -101,7 +101,7 @@ include 'web/components/head.php';
     </div>
 
     <!-- product watch-->
-    <div class="sanpham">
+    <div id="watch" class="sanpham">
        <a href="page_watch.php">
         <h2>Watch</h2>
       </a>
@@ -123,7 +123,7 @@ include 'web/components/head.php';
     </div>
 
     <!-- product macbook -->
-     <div class="sanpham">
+     <div id="macbook" class="sanpham">
        <a href="page_macbook.php">
         <h2>Macbook</h2>
       </a>
@@ -149,7 +149,7 @@ include 'web/components/head.php';
     </div>
 
     <!-- Newsfeed -->
-    <div class="tintuc">
+    <div id="tintuc" class="tintuc">
       <a href="page_new.php">
         <h2>Newsfeed</h2>
       </a>
@@ -172,6 +172,11 @@ include 'web/components/head.php';
         <?php endforeach; ?>        
       </div>
     </div>
+    <style>
+      .html {
+        scroll-behavior: smooth;
+      }
+    </style>
 
     <!-- footer -->
     <?php include 'web/components/footer.php';?>

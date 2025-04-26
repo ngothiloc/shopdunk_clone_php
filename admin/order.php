@@ -11,13 +11,22 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
 // Lấy thông tin đơn hàng cần sửa
 if (isset($_GET['edit'])) {
     $edit_id = $_GET['edit'];
-    $sql = "SELECT o.*, c.name as customer_name, p.name as product_name 
-            FROM orders o
-            LEFT JOIN customers c ON o.customer_id = c.id
+    $sql = "SELECT o.*, c.name as customer_name, p.name as product_name, p.quantity as product_quantity 
+            FROM orders o 
+            LEFT JOIN customers c ON o.customer_id = c.id 
             LEFT JOIN products p ON o.product_id = p.id 
             WHERE o.id = '$edit_id'";
     $result = mysqli_query($conn, $sql);
     $edit_order = mysqli_fetch_assoc($result);
+
+    // Kiểm tra nếu đơn hàng được cập nhật thành "completed"
+    if (isset($_POST['status']) && $edit_order['status'] != 'completed' && $_POST['status'] == 'completed') {
+        // Cập nhật số lượng sản phẩm (trừ đi 1)
+        $update_quantity_sql = "UPDATE products 
+                              SET quantity = quantity - 1 
+                              WHERE id = '{$edit_order['product_id']}'";
+        mysqli_query($conn, $update_quantity_sql);
+    }
 }
 
 // Xử lý nút hủy
@@ -90,10 +99,7 @@ $page_title = "Quản lý đơn hàng";
                             <select id="status" name="status" required>
                                 <option value="pending" <?php echo ($edit_order['status'] == 'pending') ? 'selected' : ''; ?>>
                                     Chờ xử lý
-                                </option>  
-                                <option value="pending" <?php echo ($edit_order['status'] == 'confirmed') ? 'selected' : ''; ?>>
-                                    Đã hoàn thành
-                                </option>                              
+                                </option>                                                             
                                 <option value="shipping" <?php echo ($edit_order['status'] == 'shipping') ? 'selected' : ''; ?>>
                                     Đang giao hàng
                                 </option>
@@ -135,6 +141,7 @@ $page_title = "Quản lý đơn hàng";
                                 <th>Trạng thái</th>
                                 <th>Ngày đặt</th>
                                 <th>Thao tác</th>
+                                <!-- <th>Thao tác</th> -->
                             </tr>
                         </thead>
                         <tbody>
@@ -173,15 +180,22 @@ $page_title = "Quản lý đơn hàng";
                                 </td>
                                 <td><?php echo date('d/m/Y H:i', strtotime($order['created_at'])); ?></td>
                                 <td>
-                                    <a href="order.php?edit=<?php echo $order['id']; ?>" class="btn btn-edit">
-                                        <i class="fas fa-edit"></i>
-                                    </a>
+                                    <?php if ($order['status'] != 'completed'): ?>
+                                        <a href="order.php?edit=<?php echo $order['id']; ?>" class="btn btn-edit">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                    <?php endif; ?>
                                     <a href="order.php?delete=<?php echo $order['id']; ?>" 
                                        class="btn btn-delete"
                                        onclick="return confirm('Bạn có chắc chắn muốn xóa đơn hàng này?')">
                                         <i class="fas fa-trash"></i>
                                     </a>
                                 </td>
+                                <!-- <td>
+                                    <a href="../product_detail.php?id=<?php echo $order['id'];?>" class="btn btn-view">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                </td> -->
                             </tr>
                             <?php endwhile; ?>
                         </tbody>

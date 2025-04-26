@@ -129,6 +129,7 @@
 .btn-secondary {
   background-color: var(--secondary-color);
   color: white;
+  text-decoration: none;
 }
 
 .btn-edit {
